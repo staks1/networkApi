@@ -16,9 +16,9 @@ namespace NetworkApi.Models.Dtos
         [Required]
         public string State { get; set; }
 
-        public DateTime Created { get; set; }
+        public string Created { get; set; }
 
-        public DateTime Established { get; set; }
+        public string Established { get; set; }
 
 
 
