@@ -65,7 +65,7 @@ namespace NetworkApi.Controllers
 
         //define http post method to create new nationalNetwork 
         [HttpPost]
-        //add  [Authorize]
+        [Authorize(Roles ="provider")]
         public IActionResult CreateNationalNetwork([FromBody] NationalNetworkDto nationalNetworkDto)
         {
             //null Dto
@@ -102,6 +102,7 @@ namespace NetworkApi.Controllers
         }
 
         //define patch method to update the listings
+        [Authorize(Roles = "provider")]
         [HttpPatch("{nationalNetworkId:int}",Name="UpdateNationalNetwork")]
         public IActionResult UpdateNationalNetwork(int nationalNetworkId,[FromBody] NationalNetworkDto nationalNetworkDto)
         {
@@ -131,6 +132,7 @@ namespace NetworkApi.Controllers
         //define the delete method to remove records 
 
         [HttpDelete("{nationalNetworkId:int}", Name = "DeleteNationalNetwork")]
+        [Authorize(Roles = "provider")]
         public IActionResult DeleteNationalNetwork(int nationalNetworkId)
         {
             //null Dto not exists 

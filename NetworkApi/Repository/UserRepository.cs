@@ -43,8 +43,10 @@ namespace NetworkApi.Repository
             {
                 //add claim based on user id 
                 //maybe add more claims later 
+                //add the role claim to retrieve the role of thr user
                 Subject = new ClaimsIdentity(new Claim[] {
-                        new Claim(ClaimTypes.Name ,user.Id.ToString())
+                        new Claim(ClaimTypes.Name ,user.Id.ToString()),
+                        new Claim(ClaimTypes.Role,user.Role)
 
             }),
                 //expires in 7 days time
@@ -62,14 +64,35 @@ namespace NetworkApi.Repository
 
         }
 
+        //check if user is unique method
         public bool isUniqueUser(string username)
         {
-            throw new NotImplementedException();
+            var user = _db.Users.SingleOrDefault(x => x.Username == username);
+            //return null if user does not exist
+            if (user == null)
+                return true;
+            return false;
         }
 
+        //register new user
         public User Register(string username, string password)
         {
-            throw new NotImplementedException();
+            User userObj = new User()
+            {
+                Username = username,
+                Password = password,
+                Role="customer"
+
+            };
+
+            _db.Users.Add(userObj);
+            _db.SaveChanges();
+            userObj.Password = "";
+            return userObj;
+
+
+
+
         }
     }
 }
