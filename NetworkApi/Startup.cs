@@ -35,8 +35,13 @@ namespace NetworkApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddDbContext<ApplicationDbContext>
-                (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //    services.AddDbContext<ApplicationDbContext>
+            //        (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+
             services.AddScoped<INationalNetworkRepository, NationalNetworkRepository>();  //for many controllers 
                                                                                           //add mapper                                                                        
             services.AddAutoMapper(typeof(NetworkMappings));
