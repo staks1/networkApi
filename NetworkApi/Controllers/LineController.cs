@@ -61,7 +61,7 @@ namespace NetworkApi.Controllers
 
         //define http post method to create new Line 
         [HttpPost]
-        [Authorize(Roles = "provider")]
+        [Authorize(Roles = "admin, provider")]
         public IActionResult CreateLine([FromBody] LineDto LineDto)
         {
             //null Dto
@@ -93,7 +93,7 @@ namespace NetworkApi.Controllers
         }
 
         //define patch method to update the listings
-        [Authorize(Roles = "provider")]
+        [Authorize(Roles = "admin, provider")]
         [HttpPatch("{LineId:int}", Name = "UpdateLine")]
         public IActionResult UpdateLine(int LineId, [FromBody] LineDto LineDto)
         {
@@ -121,7 +121,7 @@ namespace NetworkApi.Controllers
         //define the delete method to remove records 
 
         [HttpDelete("{LineId:int}", Name = "DeleteLine")]
-        [Authorize(Roles = "provider")]
+        [Authorize(Roles = "admin, provider")]
         public IActionResult DeleteLine(int LineId)
         {
             //null Dto not exists 

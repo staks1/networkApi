@@ -10,10 +10,10 @@ namespace NetworkApi.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public string State { get; set; }
+        public string Location { get; set; }
 
         public string Created { get; set; }
 
-        public string Established { get; set; }
+        public string Email { get; set; }
     }
 }
