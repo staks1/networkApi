@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetworkApi.Models;
 using NetworkApi.Repository.IRepository;
@@ -42,7 +37,7 @@ namespace NetworkApi.Controllers
         public IActionResult Register([FromBody] User model)
         {
             bool ifUserNameUnique = _userRepository.isUniqueUser(model.Username);
-            if(!ifUserNameUnique)
+            if (!ifUserNameUnique)
             {
                 return BadRequest(new { message = "This username is already used" });
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace NetworkApi
+﻿namespace NetworkApi
 {
     public class AppSettings
     {
@@ -14,5 +9,5 @@ namespace NetworkApi
 
 
     }
-    
+
 }

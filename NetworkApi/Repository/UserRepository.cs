@@ -4,12 +4,10 @@ using NetworkApi.Data;
 using NetworkApi.Models;
 using NetworkApi.Repository.IRepository;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NetworkApi.Repository
 {
@@ -17,9 +15,9 @@ namespace NetworkApi.Repository
     {
         private readonly ApplicationDbContext _db;
         //we need the settings secret key
-        private readonly AppSettings _appSettings; 
+        private readonly AppSettings _appSettings;
 
-        public UserRepository(ApplicationDbContext db,IOptions<AppSettings> appsettings)
+        public UserRepository(ApplicationDbContext db, IOptions<AppSettings> appsettings)
         {
             _db = db;
             //retrieve the secret key value
@@ -70,7 +68,10 @@ namespace NetworkApi.Repository
             var user = _db.Users.SingleOrDefault(x => x.Username == username);
             //return null if user does not exist
             if (user == null)
+            {
                 return true;
+            }
+
             return false;
         }
 
@@ -81,7 +82,7 @@ namespace NetworkApi.Repository
             {
                 Username = username,
                 Password = password,
-                Role="customer"
+                Role = "customer"
 
             };
 

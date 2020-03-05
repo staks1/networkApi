@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NetworkApi.Models;
 using NetworkApi.Models.Dtos;
 using NetworkApi.Repository.IRepository;
+using System.Collections.Generic;
 
 namespace NetworkApi.Controllers
 {
@@ -18,10 +14,10 @@ namespace NetworkApi.Controllers
     public class NationalNetworkController : ControllerBase
     {
 
-        private INationalNetworkRepository _nationalNetworkRepository;
+        private readonly INationalNetworkRepository _nationalNetworkRepository;
         private readonly IMapper _mapper;
 
-        public NationalNetworkController(INationalNetworkRepository nationalNetworkRepository,IMapper mapper )
+        public NationalNetworkController(INationalNetworkRepository nationalNetworkRepository, IMapper mapper)
         {
             _nationalNetworkRepository = nationalNetworkRepository;
             _mapper = mapper;
@@ -29,7 +25,7 @@ namespace NetworkApi.Controllers
 
         //define http get method to get all NationalNetworks
         public IActionResult GetNationalNetworks()
-        {   
+        {
 
             var networks = _nationalNetworkRepository.GetNationalNetworks();
             //do not expose the model 
@@ -37,11 +33,11 @@ namespace NetworkApi.Controllers
 
             var networksDto = new List<NationalNetworkDto>();
 
-            foreach(var net in networks)
+            foreach (var net in networks)
             {
                 networksDto.Add(_mapper.Map<NationalNetworkDto>(net));
             }
-            
+
             return Ok(networksDto);
         }
 
@@ -49,7 +45,7 @@ namespace NetworkApi.Controllers
 
         //define http get method for getting a certain Network based on Region Name
         //set up the parameter type else it fails-collides with the previous get
-        [HttpGet("{nationalNetworkId:int}",Name ="GetNationalNetwork")]
+        [HttpGet("{nationalNetworkId:int}", Name = "GetNationalNetwork")]
         public IActionResult GetNationalNetwork(int nationalNetworkId)
         {
             var network = _nationalNetworkRepository.GetNationalNetwork(nationalNetworkId);
@@ -65,7 +61,7 @@ namespace NetworkApi.Controllers
 
         //define http post method to create new nationalNetwork 
         [HttpPost]
-        [Authorize(Roles ="provider")]
+        [Authorize(Roles = "provider")]
         public IActionResult CreateNationalNetwork([FromBody] NationalNetworkDto nationalNetworkDto)
         {
             //null Dto
@@ -73,14 +69,14 @@ namespace NetworkApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-              //if it does not exist 
+            //if it does not exist 
             if (_nationalNetworkRepository.NationalNetworkExists(nationalNetworkDto.Name))
             {
                 ModelState.AddModelError("", "This Network already exists!");
-                return StatusCode(404,ModelState);
+                return StatusCode(404, ModelState);
             }
-             //if state not valid 
-            if(!ModelState.IsValid)
+            //if state not valid 
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -97,17 +93,17 @@ namespace NetworkApi.Controllers
             }
 
             //return the created object instead of a simple ok answer 
-            return CreatedAtRoute("GetNationalNetwork",new { nationalNetworkId = newNationalNetwork.Id },newNationalNetwork);
+            return CreatedAtRoute("GetNationalNetwork", new { nationalNetworkId = newNationalNetwork.Id }, newNationalNetwork);
 
         }
 
         //define patch method to update the listings
         [Authorize(Roles = "provider")]
-        [HttpPatch("{nationalNetworkId:int}",Name="UpdateNationalNetwork")]
-        public IActionResult UpdateNationalNetwork(int nationalNetworkId,[FromBody] NationalNetworkDto nationalNetworkDto)
+        [HttpPatch("{nationalNetworkId:int}", Name = "UpdateNationalNetwork")]
+        public IActionResult UpdateNationalNetwork(int nationalNetworkId, [FromBody] NationalNetworkDto nationalNetworkDto)
         {
             //null Dto
-            if (nationalNetworkDto == null || nationalNetworkId!=nationalNetworkDto.Id)
+            if (nationalNetworkDto == null || nationalNetworkId != nationalNetworkDto.Id)
             {
                 return BadRequest(ModelState);
             }
@@ -152,7 +148,7 @@ namespace NetworkApi.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return StatusCode(200,"success at deletion");
+            return StatusCode(200, "success at deletion");
 
         }
 

@@ -1,23 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using NetworkApi.Data;
+using NetworkApi.NetworkMapper;
+using NetworkApi.LineMapper;
 using NetworkApi.Repository;
 using NetworkApi.Repository.IRepository;
-using AutoMapper;
-using NetworkApi.NetworkMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 namespace NetworkApi
@@ -45,6 +39,9 @@ namespace NetworkApi
             services.AddScoped<INationalNetworkRepository, NationalNetworkRepository>();  //for many controllers 
                                                                                           //add mapper                                                                        
             services.AddAutoMapper(typeof(NetworkMappings));
+
+            services.AddScoped<ILineRepository, LineRepository>();
+            services.AddAutoMapper(typeof(LineMappings));
             //add UserRepository 
             services.AddScoped<IUserRepository, UserRepository>();
 
@@ -57,10 +54,11 @@ namespace NetworkApi
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
             //add bearer support 
-            services.AddAuthentication(x => { 
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-           })
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
              .AddJwtBearer(x =>
              {
                  x.RequireHttpsMetadata = false;
@@ -70,11 +68,11 @@ namespace NetworkApi
                      ValidateIssuerSigningKey = true,
                      IssuerSigningKey = new SymmetricSecurityKey(key),
                      ValidateIssuer = false,
-                     ValidateAudience=false
+                     ValidateAudience = false
                      //set validate audience to true in production 
 
                  };
-                   
+
 
 
 
@@ -101,7 +99,7 @@ namespace NetworkApi
 
             app.UseRouting();
             //add cross origin (cors) support
-            app.UseCors(x=>x
+            app.UseCors(x => x
             .AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader()

@@ -1,10 +1,8 @@
 ﻿using NetworkApi.Data;
 using NetworkApi.Models;
 using NetworkApi.Repository.IRepository;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NetworkApi.Repository
 {
@@ -39,7 +37,7 @@ namespace NetworkApi.Repository
 
         public ICollection<NationalNetwork> GetNationalNetworks()
         {
-            return _db.NationalNetworks.OrderBy(a=>a.Name).ToList();
+            return _db.NationalNetworks.OrderBy(a => a.Name).ToList();
         }
 
         public bool NationalNetworkExists(string name)
